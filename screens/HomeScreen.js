@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import {
   View,
   Platform,
@@ -15,9 +14,15 @@ import {
   MagnifyingGlassIcon,
 } from 'react-native-heroicons/outline';
 
+import TrendingMovies from '../components/TrendingMovies';
+import MovieList from '../components/MovieList';
+
 const iOS = Platform.OS === 'ios';
 
 export default function HomeScreen() {
+  const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
+  const [upcomingMovies, setUpcomingMovies] = useState([1, 2, 3]);
+
   return (
     <View className="flex-1 bg-neutral-800">
       {/* Navigation Bar */}
@@ -35,7 +40,12 @@ export default function HomeScreen() {
       </SafeAreaView>
 
       {/* Trending Movies Carousel */}
-      <ScrollView></ScrollView>
+      <ScrollView>
+        <TrendingMovies data={trendingMovies} />
+      </ScrollView>
+
+      {/* Movie List */}
+      <MovieList data={upcomingMovies} />
     </View>
   );
 }
