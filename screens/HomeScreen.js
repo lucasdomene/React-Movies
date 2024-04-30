@@ -39,13 +39,16 @@ export default function HomeScreen() {
         </View>
       </SafeAreaView>
 
-      {/* Trending Movies Carousel */}
       <ScrollView>
+        {/* Trending Movies Carousel */}
         <TrendingMovies data={trendingMovies} />
-      </ScrollView>
 
-      {/* Movie List */}
-      <MovieList data={upcomingMovies} />
+        {/* Upcoming Movies */}
+        <MovieList title="Upcoming" data={upcomingMovies} />
+
+        {/* Top Rated Movies */}
+        <MovieList title="Top Rated" data={upcomingMovies} />
+      </ScrollView>
     </View>
   );
 }
