@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Platform,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
@@ -16,8 +10,7 @@ import {
 
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
-
-const iOS = Platform.OS === 'ios';
+import { iOS } from '../constants/constants';
 
 export default function HomeScreen() {
   const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);

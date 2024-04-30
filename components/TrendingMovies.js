@@ -1,16 +1,15 @@
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
-
-import Carousel from 'react-native-snap-carousel';
-import MovieCard from './MovieCard';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Carousel from 'react-native-snap-carousel';
 
-var { width } = Dimensions.get('window');
+import MovieCard from './MovieCard';
+import { width } from '../constants/constants';
 
 export default function TrendingMovies({ data }) {
   const navigation = useNavigation();
 
-  function onPress() {
+  function onPress(item) {
     navigation.navigate('Movie', item);
   }
 
@@ -21,7 +20,9 @@ export default function TrendingMovies({ data }) {
         data={data}
         firstItem={1}
         inactiveSlideOpacity={0.6}
-        renderItem={({ item }) => <MovieCard item={item} onPress={onPress} />}
+        renderItem={({ item }) => (
+          <MovieCard item={item} onPress={() => onPress(item)} />
+        )}
         sliderWidth={width}
         itemWidth={width * 0.62}
         slideStyle={{ display: 'flex', alignItems: 'center' }}

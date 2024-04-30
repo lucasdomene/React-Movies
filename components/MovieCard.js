@@ -1,13 +1,7 @@
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Image,
-} from 'react-native';
+import { TouchableWithoutFeedback, Image } from 'react-native';
 import React from 'react';
 
-var { width, height } = Dimensions.get('window');
+import { width, height } from '../constants/constants';
 
 export default function MovieCard({ item, onPress }) {
   const imageWidth = width * 0.6;

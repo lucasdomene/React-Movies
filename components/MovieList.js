@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Dimensions } from 'react-native';
 import {
   View,
   Text,
@@ -10,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 
-var { width, height } = Dimensions.get('window');
+import { width, height } from '../constants/constants';
 
 export default function MovieList({ title, data }) {
   const navigation = useNavigation();
