@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeftIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import Cast from '../components/Cast';
 import { width, height } from '../constants/constants';
 
 export default function MovieScreen() {
@@ -13,6 +14,7 @@ export default function MovieScreen() {
   const genres = ['Action', 'Adventure', 'Drama', 'Fantasy'];
 
   const [isFavorite, setIsFavorite] = useState(false);
+  const [cast, setCast] = useState([1, 2, 3, 4]);
 
   useEffect(() => {}, [item]);
 
@@ -89,6 +91,9 @@ export default function MovieScreen() {
           </Text>
         </View>
       </View>
+
+      {/* <Cast /> */}
+      <Cast cast={cast} />
     </ScrollView>
   );
 }
