@@ -12,17 +12,25 @@ import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { iOS } from '../constants/constants';
-import { fetchTrendingMovies } from '../api/MovieDB';
+import {
+  fetchTrendingMovies,
+  fetchUpcomingMovies,
+  fetchTopRatedMovies,
+} from '../api/MovieDB';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
 
-  const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
-  const [upcomingMovies, setUpcomingMovies] = useState([1, 2, 3]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
   }, []);
 
   async function getTrendingMovies() {
@@ -30,6 +38,19 @@ export default function HomeScreen() {
 
     if (data && data.results) setTrendingMovies(data.results);
     setIsLoading(false);
+  }
+
+  async function getUpcomingMovies() {
+    const data = await fetchUpcomingMovies();
+
+    if (data && data.results) setUpcomingMovies(data.results);
+  }
+
+  async function getTopRatedMovies() {
+    const data = await fetchTopRatedMovies();
+
+    if (data && data.results) setTopRatedMovies(data.results);
+    console.log(data.results);
   }
 
   if (isLoading) return <Loading />;
@@ -52,13 +73,13 @@ export default function HomeScreen() {
 
       <ScrollView>
         {/* Trending Movies Carousel */}
-        <TrendingMovies data={trendingMovies} />
+        {trendingMovies.length > 0 && <TrendingMovies data={trendingMovies} />}
 
         {/* Upcoming Movies */}
         <MovieList title="Upcoming" data={upcomingMovies} />
 
         {/* Top Rated Movies */}
-        <MovieList title="Top Rated" data={upcomingMovies} />
+        <MovieList title="Top Rated" data={topRatedMovies} />
       </ScrollView>
     </View>
   );

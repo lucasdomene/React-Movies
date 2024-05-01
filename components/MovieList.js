@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { width, height } from '../constants/constants';
+import { image185 } from '../api/MovieDB';
 
 export default function MovieList({ title, data, hideSeeAll = false }) {
   const navigation = useNavigation();
@@ -40,11 +41,20 @@ export default function MovieList({ title, data, hideSeeAll = false }) {
             >
               <View className="space-y-1 mr-4">
                 <Image
-                  source={require('../assets/movie-poster.jpg')}
+                  source={{ uri: image185(item.poster_path) }}
                   className="rounded-3xl"
                   style={{ width: width * 0.33, height: height * 0.22 }}
                 />
-                <Text className="text-neutral-300 ml-1">Outsider</Text>
+                <Text
+                  className="text-neutral-300 ml-1"
+                  style={{
+                    width: width * 0.33,
+                  }}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {item.title}
+                </Text>
               </View>
             </TouchableWithoutFeedback>
           );
