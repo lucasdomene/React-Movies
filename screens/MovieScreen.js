@@ -11,17 +11,33 @@ import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { width, height } from '../constants/constants';
 import { FlatListComponent } from 'react-native';
+import { fetchMovieDetails, image500 } from '../api/MovieDB';
 
 export default function MovieScreen() {
   const { params: item } = useRoute();
   const navigation = useNavigation();
-  const genres = ['Action', 'Adventure', 'Drama', 'Fantasy'];
 
+  const [genres, setGenres] = useState([]);
+  const [status, setStatus] = useState('');
+  const [runtime, setRuntime] = useState(null);
   const [cast, setCast] = useState([1, 2, 3, 4, 5]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {}, [item]);
+  useEffect(() => {
+    getMovieDetails();
+  }, [item]);
+
+  async function getMovieDetails() {
+    const data = await fetchMovieDetails(item.id);
+    setGenres(data.genres.map((genre) => genre.name));
+    setStatus(data.status);
+    setRuntime(data.runtime);
+  }
+
+  function releaseYear() {
+    return new Date(item.release_date).getFullYear();
+  }
 
   if (isLoading) return <Loading />;
 
@@ -36,7 +52,7 @@ export default function MovieScreen() {
         {/* Movie Poster */}
         <View>
           <Image
-            source={require('../assets/movie-poster.jpg')}
+            source={{ uri: image500(item.poster_path) }}
             style={{ width, height: height * 0.55 }}
           />
           <LinearGradient
@@ -53,15 +69,15 @@ export default function MovieScreen() {
         </View>
 
         {/* Movie Details */}
-        <View style={{ marginTop: -(height * 0.09) }} className="space-y-4">
+        <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
           {/* Title */}
           <Text className="text-white text-center text-3xl font-bold tracking-wider">
-            Outsider
+            {item.title}
           </Text>
 
           {/* Status */}
           <Text className="text-neutral-400 font-semibold text-base text-center">
-            Released • 2020 • 170 min
+            {status} • {releaseYear()} • {runtime && runtime} min
           </Text>
 
           {/* Genres */}
@@ -80,10 +96,7 @@ export default function MovieScreen() {
 
           {/* Description */}
           <Text className="text-neutral-400 text-base mx-4 tracking-wide">
-            When an insidious supernatural force edges its way into a seemingly
-            straightforward investigation into the gruesome murder of a young
-            boy, it leads a seasoned cop and an unorthodox investigator to
-            question everything they believe in.
+            {item.overview}
           </Text>
         </View>
       </View>

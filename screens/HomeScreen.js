@@ -50,7 +50,6 @@ export default function HomeScreen() {
     const data = await fetchTopRatedMovies();
 
     if (data && data.results) setTopRatedMovies(data.results);
-    console.log(data.results);
   }
 
   if (isLoading) return <Loading />;
@@ -76,10 +75,14 @@ export default function HomeScreen() {
         {trendingMovies.length > 0 && <TrendingMovies data={trendingMovies} />}
 
         {/* Upcoming Movies */}
-        <MovieList title="Upcoming" data={upcomingMovies} />
+        {upcomingMovies.length > 0 && (
+          <MovieList title="Upcoming" data={upcomingMovies} />
+        )}
 
         {/* Top Rated Movies */}
-        <MovieList title="Top Rated" data={topRatedMovies} />
+        {topRatedMovies.length > 0 && (
+          <MovieList title="Top Rated" data={topRatedMovies} />
+        )}
       </ScrollView>
     </View>
   );
