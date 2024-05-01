@@ -11,7 +11,7 @@ import {
 
 import { width, height } from '../constants/constants';
 
-export default function MovieList({ title, data }) {
+export default function MovieList({ title, data, hideSeeAll = false }) {
   const navigation = useNavigation();
 
   return (
@@ -19,9 +19,11 @@ export default function MovieList({ title, data }) {
       {/* Headline */}
       <View className="mx-4 mb-4 flex-row justify-between items-center">
         <Text className="text-white text-xl">{title}</Text>
-        <TouchableOpacity>
-          <Text className="text-lg text-yellow-400">See All</Text>
-        </TouchableOpacity>
+        {!hideSeeAll && (
+          <TouchableOpacity>
+            <Text className="text-lg text-yellow-400">See All</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Moview Row */}
@@ -34,7 +36,7 @@ export default function MovieList({ title, data }) {
           return (
             <TouchableWithoutFeedback
               key={index}
-              onPress={() => navigation.navigate('Movie', item)}
+              onPress={() => navigation.push('Movie', item)}
             >
               <View className="space-y-1 mr-4">
                 <Image

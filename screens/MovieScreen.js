@@ -6,6 +6,7 @@ import { ChevronLeftIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import Cast from '../components/Cast';
+import MovieList from '../components/MovieList';
 import { width, height } from '../constants/constants';
 
 export default function MovieScreen() {
@@ -14,7 +15,8 @@ export default function MovieScreen() {
   const genres = ['Action', 'Adventure', 'Drama', 'Fantasy'];
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4]);
+  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
+  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
 
   useEffect(() => {}, [item]);
 
@@ -94,6 +96,9 @@ export default function MovieScreen() {
 
       {/* <Cast /> */}
       <Cast cast={cast} />
+
+      {/* Similar movies */}
+      <MovieList title="Similar Movies" data={similarMovies} hideSeeAll />
     </ScrollView>
   );
 }
