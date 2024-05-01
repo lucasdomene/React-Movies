@@ -10,6 +10,7 @@ import {
 
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 import { iOS } from '../constants/constants';
 
 export default function HomeScreen() {
@@ -17,6 +18,9 @@ export default function HomeScreen() {
 
   const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
   const [upcomingMovies, setUpcomingMovies] = useState([1, 2, 3]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (isLoading) return <Loading />;
 
   return (
     <View className="flex-1 bg-neutral-800">

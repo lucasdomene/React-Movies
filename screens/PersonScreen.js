@@ -5,9 +5,13 @@ import { View } from 'react-native';
 import Header from '../components/Header';
 import { android, width, height } from '../constants/constants';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 
 export default function PersonScreen() {
   const [movies, setMovies] = useState([1, 2, 3, 4, 5]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (isLoading) return <Loading />;
 
   return (
     <ScrollView

@@ -13,10 +13,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 export default function SearchScreen() {
   const navigation = useNavigation();
   const [results, setResults] = useState([1, 2, 3]);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
@@ -36,34 +38,39 @@ export default function SearchScreen() {
       </View>
 
       {/* Results */}
-      <ScrollView
-        className="space-y-3"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-      >
-        <Text className="text-white font-semibold ml-1">
-          Results ({results.length})
-        </Text>
-        <View className="flex-row justify-between flex-wrap">
-          {results.map((item, index) => {
-            return (
-              <TouchableWithoutFeedback
-                key={index}
-                onPress={() => navigation.push('Movie', item)}
-              >
-                <View className="space-y-2 mb-4">
-                  <Image
-                    className="rounded-3xl"
-                    source={require('../assets/movie-poster.jpg')}
-                    style={{ width: width * 0.44, height: height * 0.3 }}
-                  />
-                  <Text className="text-neutral-300 ml-1">Outsider</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            );
-          })}
-        </View>
-      </ScrollView>
+
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <ScrollView
+          className="space-y-3"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+        >
+          <Text className="text-white font-semibold ml-1">
+            Results ({results.length})
+          </Text>
+          <View className="flex-row justify-between flex-wrap">
+            {results.map((item, index) => {
+              return (
+                <TouchableWithoutFeedback
+                  key={index}
+                  onPress={() => navigation.push('Movie', item)}
+                >
+                  <View className="space-y-2 mb-4">
+                    <Image
+                      className="rounded-3xl"
+                      source={require('../assets/movie-poster.jpg')}
+                      style={{ width: width * 0.44, height: height * 0.3 }}
+                    />
+                    <Text className="text-neutral-300 ml-1">Outsider</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              );
+            })}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }

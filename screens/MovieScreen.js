@@ -8,7 +8,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Header from '../components/Header';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 import { width, height } from '../constants/constants';
+import { FlatListComponent } from 'react-native';
 
 export default function MovieScreen() {
   const { params: item } = useRoute();
@@ -17,18 +19,20 @@ export default function MovieScreen() {
 
   const [cast, setCast] = useState([1, 2, 3, 4, 5]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {}, [item]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
       className="flex-1 bg-neutral-800"
     >
-      <View className="w-full">
-        {/* Header */}
-        <Header overlap />
+      <Header overlap />
 
+      <View className="w-full">
         {/* Movie Poster */}
         <View>
           <Image
