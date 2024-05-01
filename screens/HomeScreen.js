@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -12,13 +12,25 @@ import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { iOS } from '../constants/constants';
+import { fetchTrendingMovies } from '../api/MovieDB';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
 
   const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
   const [upcomingMovies, setUpcomingMovies] = useState([1, 2, 3]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getTrendingMovies();
+  }, []);
+
+  async function getTrendingMovies() {
+    const data = await fetchTrendingMovies();
+
+    if (data && data.results) setTrendingMovies(data.results);
+    setIsLoading(false);
+  }
 
   if (isLoading) return <Loading />;
 
