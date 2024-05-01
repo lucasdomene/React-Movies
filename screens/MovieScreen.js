@@ -27,7 +27,7 @@ export default function MovieScreen() {
     >
       <View className="w-full">
         {/* Header */}
-        <Header />
+        <Header overlap />
 
         {/* Movie Poster */}
         <View>

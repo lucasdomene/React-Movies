@@ -4,12 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeftIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Header() {
+export default function Header({ overlap = false }) {
   const navigation = useNavigation();
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <SafeAreaView className="absolute z-20 w-full flex-row justify-between items-center px-4 mt-2">
+    <SafeAreaView
+      className={`${
+        overlap && 'absolute'
+      } z-20 w-full flex-row justify-between items-center px-4 mt-2`}
+    >
       <TouchableOpacity
         className="rounded-xl p-1 bg-yellow-400"
         onPress={() => navigation.goBack()}
