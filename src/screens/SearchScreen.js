@@ -15,7 +15,7 @@ import { XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation } from '@react-navigation/native';
 import { debounce } from 'lodash';
 import Loading from '../components/Loading';
-import { image185, image342, searchMovies } from '../api/MovieDB';
+import { image342, searchMovies } from '../api/MovieDB';
 
 export default function SearchScreen() {
   const navigation = useNavigation();
@@ -41,7 +41,7 @@ export default function SearchScreen() {
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
       {/* Search Bar */}
-      <View className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
+      <View className="mx-4 my-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
         <TextInput
           className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
           placeholder="Search Movie"
@@ -66,9 +66,11 @@ export default function SearchScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 15 }}
         >
-          <Text className="text-white font-semibold ml-1">
-            Results ({results.length})
-          </Text>
+          {results.length > 0 && (
+            <Text className="text-white font-semibold ml-1">
+              Results ({results.length})
+            </Text>
+          )}
           <View className="flex-row justify-between flex-wrap">
             {results.map((item, index) => {
               return (

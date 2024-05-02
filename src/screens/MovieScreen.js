@@ -10,7 +10,7 @@ import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { width, height } from '../constants/constants';
-import { FlatListComponent } from 'react-native';
+
 import {
   fetchMovieCredits,
   fetchMovieDetails,
