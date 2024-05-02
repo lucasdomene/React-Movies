@@ -7,6 +7,7 @@ const trendingMoviesEndpoint = `${baseUrl}/trending/movie/day?api_key=${API_KEY}
 const upcomingMoviesEndpoint = `${baseUrl}/movie/upcoming?api_key=${API_KEY}`;
 const topRatedMoviesEndpoint = `${baseUrl}/movie/top_rated?api_key=${API_KEY}`;
 const movieDetailsEndpoint = `${baseUrl}/movie/{movie_id}?api_key=${API_KEY}`;
+const movieCreditsEndpoint = `${baseUrl}/movie/{movie_id}/credits?api_key=${API_KEY}`;
 
 async function request(endpoint, params) {
   const options = {
@@ -38,6 +39,10 @@ export async function fetchTopRatedMovies() {
 
 export async function fetchMovieDetails(id) {
   return request(movieDetailsEndpoint.replace('{movie_id}', id));
+}
+
+export async function fetchMovieCredits(id) {
+  return request(movieCreditsEndpoint.replace('{movie_id}', id));
 }
 
 export function image500(path) {

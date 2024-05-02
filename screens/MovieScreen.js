@@ -11,7 +11,8 @@ import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { width, height } from '../constants/constants';
 import { FlatListComponent } from 'react-native';
-import { fetchMovieDetails, image500 } from '../api/MovieDB';
+import { fetchMovieCredits, fetchMovieDetails, image500 } from '../api/MovieDB';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function MovieScreen() {
   const { params: item } = useRoute();
@@ -20,12 +21,13 @@ export default function MovieScreen() {
   const [genres, setGenres] = useState([]);
   const [status, setStatus] = useState('');
   const [runtime, setRuntime] = useState(null);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
+  const [cast, setCast] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getMovieDetails();
+    getMovieCredits();
   }, [item]);
 
   async function getMovieDetails() {
@@ -33,6 +35,12 @@ export default function MovieScreen() {
     setGenres(data.genres.map((genre) => genre.name));
     setStatus(data.status);
     setRuntime(data.runtime);
+  }
+
+  async function getMovieCredits() {
+    const data = await fetchMovieCredits(item.id);
+    console.log(data.cast);
+    setCast(data.cast);
   }
 
   function releaseYear() {
