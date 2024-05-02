@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -13,8 +13,23 @@ import {
 import { width, height } from '../constants/constants';
 import { image185 } from '../api/MovieDB';
 
-export default function MovieList({ title, data, hideSeeAll = false }) {
+export default function MovieList({
+  title,
+  data,
+  hideSeeAll = false,
+  onPagging = null,
+}) {
   const navigation = useNavigation();
+  const [page, setPage] = useState(1);
+
+  function handlePagging() {
+    if (onPagging) {
+      setPage((previous) => {
+        onPagging(previous + 1);
+        return previous + 1;
+      });
+    }
+  }
 
   return (
     <View className="mb-8 spacey-4">
@@ -60,7 +75,9 @@ export default function MovieList({ title, data, hideSeeAll = false }) {
             </TouchableWithoutFeedback>
           );
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index}
+        onEndReachedThreshold={0.2}
+        onEndReached={handlePagging}
       />
     </View>
   );

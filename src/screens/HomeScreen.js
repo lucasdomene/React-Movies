@@ -29,8 +29,8 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getTrendingMovies();
-    getUpcomingMovies();
-    getTopRatedMovies();
+    getUpcomingMovies(1);
+    getTopRatedMovies(1);
   }, []);
 
   async function getTrendingMovies() {
@@ -40,16 +40,20 @@ export default function HomeScreen() {
     setIsLoading(false);
   }
 
-  async function getUpcomingMovies() {
-    const data = await fetchUpcomingMovies();
+  async function getUpcomingMovies(page) {
+    const data = await fetchUpcomingMovies(page);
 
-    if (data && data.results) setUpcomingMovies(data.results);
+    if (data && data.results) {
+      setUpcomingMovies((previous) => [...previous, ...data.results]);
+    }
   }
 
-  async function getTopRatedMovies() {
-    const data = await fetchTopRatedMovies();
+  async function getTopRatedMovies(page) {
+    const data = await fetchTopRatedMovies(page);
 
-    if (data && data.results) setTopRatedMovies(data.results);
+    if (data && data.results) {
+      setTopRatedMovies((previous) => [...previous, ...data.results]);
+    }
   }
 
   if (isLoading) return <Loading />;
@@ -76,12 +80,20 @@ export default function HomeScreen() {
 
         {/* Upcoming Movies */}
         {upcomingMovies.length > 0 && (
-          <MovieList title="Upcoming" data={upcomingMovies} />
+          <MovieList
+            title="Upcoming"
+            data={upcomingMovies}
+            onPagging={getUpcomingMovies}
+          />
         )}
 
         {/* Top Rated Movies */}
         {topRatedMovies.length > 0 && (
-          <MovieList title="Top Rated" data={topRatedMovies} />
+          <MovieList
+            title="Top Rated"
+            data={topRatedMovies}
+            onPagging={getTopRatedMovies}
+          />
         )}
       </ScrollView>
     </View>

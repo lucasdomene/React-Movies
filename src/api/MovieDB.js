@@ -4,8 +4,10 @@ import { API_KEY } from '../constants/constants';
 const baseUrl = 'https://api.themoviedb.org/3';
 
 const trendingMoviesEndpoint = `${baseUrl}/trending/movie/day?api_key=${API_KEY}`;
-const upcomingMoviesEndpoint = `${baseUrl}/movie/upcoming?api_key=${API_KEY}`;
-const topRatedMoviesEndpoint = `${baseUrl}/movie/top_rated?api_key=${API_KEY}`;
+const upcomingMoviesEndpoint = (page) =>
+  `${baseUrl}/movie/upcoming?api_key=${API_KEY}&page=${page}`;
+const topRatedMoviesEndpoint = (page) =>
+  `${baseUrl}/movie/top_rated?api_key=${API_KEY}&page=${page}`;
 const searchMoviesEndpoint = `${baseUrl}/search/movie?api_key=${API_KEY}`;
 
 const movieDetailsEndpoint = (id) =>
@@ -39,12 +41,12 @@ export async function fetchTrendingMovies() {
   return request(trendingMoviesEndpoint);
 }
 
-export async function fetchUpcomingMovies() {
-  return request(upcomingMoviesEndpoint);
+export async function fetchUpcomingMovies(page) {
+  return request(upcomingMoviesEndpoint(page));
 }
 
-export async function fetchTopRatedMovies() {
-  return request(topRatedMoviesEndpoint);
+export async function fetchTopRatedMovies(page) {
+  return request(topRatedMoviesEndpoint(page));
 }
 
 export async function fetchMovieDetails(id) {
