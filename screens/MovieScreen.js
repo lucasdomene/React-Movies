@@ -83,7 +83,7 @@ export default function MovieScreen() {
         {/* Movie Details */}
         <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
           {/* Title */}
-          <Text className="text-white text-center text-3xl font-bold tracking-wider">
+          <Text className="text-white text-center text-3xl font-bold tracking-wider mx-3">
             {item.title}
           </Text>
 
@@ -93,7 +93,17 @@ export default function MovieScreen() {
           </Text>
 
           {/* Genres */}
-          <View className="flex-row justify-center mx-4 space-x-3">
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 12,
+              gap: 10,
+              justifyContent: 'center',
+              flexGrow: 1,
+            }}
+          >
             {details.genres.map((genre) => (
               <View
                 key={genre.id}
@@ -104,7 +114,7 @@ export default function MovieScreen() {
                 </Text>
               </View>
             ))}
-          </View>
+          </ScrollView>
 
           {/* Description */}
           <Text className="text-neutral-400 text-base mx-4 tracking-wide">

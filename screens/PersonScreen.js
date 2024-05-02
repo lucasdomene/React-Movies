@@ -111,7 +111,9 @@ export default function PersonScreen() {
           </View>
           <View className="border-r-neutral-400 px-2 items-center">
             <Text className="text-white font-semibold">Popularity</Text>
-            <Text className="text-neutral-300 text-sm">{item.popularity}</Text>
+            <Text className="text-neutral-300 text-sm">
+              {item.popularity.toFixed(2)}%
+            </Text>
           </View>
         </View>
 

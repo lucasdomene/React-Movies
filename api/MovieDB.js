@@ -6,11 +6,18 @@ const baseUrl = 'https://api.themoviedb.org/3';
 const trendingMoviesEndpoint = `${baseUrl}/trending/movie/day?api_key=${API_KEY}`;
 const upcomingMoviesEndpoint = `${baseUrl}/movie/upcoming?api_key=${API_KEY}`;
 const topRatedMoviesEndpoint = `${baseUrl}/movie/top_rated?api_key=${API_KEY}`;
-const movieDetailsEndpoint = `${baseUrl}/movie/{movie_id}?api_key=${API_KEY}`;
-const movieCreditsEndpoint = `${baseUrl}/movie/{movie_id}/credits?api_key=${API_KEY}`;
-const movieRecommendationsEndpoint = `${baseUrl}/movie/{movie_id}/recommendations?api_key=${API_KEY}`;
-const personDetailsEndpoint = `${baseUrl}/person/{person_id}?api_key=${API_KEY}`;
-const personMovieCreditsEndpoint = `${baseUrl}/person/{person_id}/movie_credits?api_key=${API_KEY}`;
+const searchMoviesEndpoint = `${baseUrl}/search/movie?api_key=${API_KEY}`;
+
+const movieDetailsEndpoint = (id) =>
+  `${baseUrl}/movie/${id}?api_key=${API_KEY}`;
+const movieCreditsEndpoint = (id) =>
+  `${baseUrl}/movie/${id}/credits?api_key=${API_KEY}`;
+const movieRecommendationsEndpoint = (id) =>
+  `${baseUrl}/movie/${id}/recommendations?api_key=${API_KEY}`;
+const personDetailsEndpoint = (id) =>
+  `${baseUrl}/person/${id}?api_key=${API_KEY}`;
+const personMovieCreditsEndpoint = (id) =>
+  `${baseUrl}/person/${id}/movie_credits?api_key=${API_KEY}`;
 
 async function request(endpoint, params) {
   const options = {
@@ -41,23 +48,27 @@ export async function fetchTopRatedMovies() {
 }
 
 export async function fetchMovieDetails(id) {
-  return request(movieDetailsEndpoint.replace('{movie_id}', id));
+  return request(movieDetailsEndpoint(id));
 }
 
 export async function fetchMovieCredits(id) {
-  return request(movieCreditsEndpoint.replace('{movie_id}', id));
+  return request(movieCreditsEndpoint(id));
 }
 
 export async function fetchMovieRecommendations(id) {
-  return request(movieRecommendationsEndpoint.replace('{movie_id}', id));
+  return request(movieRecommendationsEndpoint(id));
+}
+
+export async function searchMovies(query) {
+  return request(searchMoviesEndpoint, query);
 }
 
 export async function fetchPersonDetails(id) {
-  return request(personDetailsEndpoint.replace('{person_id}', id));
+  return request(personDetailsEndpoint(id));
 }
 
 export async function fetchPersonMovieCredits(id) {
-  return request(personMovieCreditsEndpoint.replace('{person_id}', id));
+  return request(personMovieCreditsEndpoint(id));
 }
 
 export function image500(path) {
