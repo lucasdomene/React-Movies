@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image,
+  FlatList,
 } from 'react-native';
 import React, { useCallback, useState } from 'react';
 
@@ -61,42 +62,36 @@ export default function SearchScreen() {
       {isLoading ? (
         <Loading />
       ) : (
-        <ScrollView
-          className="space-y-3"
+        <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 15 }}
-        >
-          {results.length > 0 && (
-            <Text className="text-white font-semibold ml-1">
-              Results ({results.length})
-            </Text>
-          )}
-          <View className="flex-row justify-between flex-wrap">
-            {results.map((item, index) => {
-              return (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onPress={() => navigation.push('Movie', item)}
-                >
-                  <View className="space-y-2 mb-4">
-                    <Image
-                      className="rounded-3xl"
-                      source={{ uri: image342(item.poster_path) }}
-                      style={{ width: width * 0.44, height: height * 0.3 }}
-                    />
-                    <Text
-                      className="text-neutral-300 ml-1 text-center"
-                      style={{ width: width * 0.44 }}
-                      numberOfLines={3}
-                    >
-                      {item.title}
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              );
-            })}
-          </View>
-        </ScrollView>
+          columnWrapperStyle={{ justifyContent: 'space-between' }}
+          numColumns={2}
+          data={results}
+          renderItem={({ item }) => {
+            return (
+              <TouchableWithoutFeedback
+                onPress={() => navigation.push('Movie', item)}
+              >
+                <View className="space-y-2 mb-4">
+                  <Image
+                    className="rounded-3xl"
+                    source={{ uri: image342(item.poster_path) }}
+                    style={{ width: width * 0.44, height: height * 0.3 }}
+                  />
+                  <Text
+                    className="text-neutral-300 ml-1 text-center"
+                    style={{ width: width * 0.44 }}
+                    numberOfLines={3}
+                  >
+                    {item.title}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            );
+          }}
+          keyExtractor={(item) => item.id}
+        />
       )}
     </SafeAreaView>
   );

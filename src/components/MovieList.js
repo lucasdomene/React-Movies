@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image,
+  FlatList,
 } from 'react-native';
 
 import { width, height } from '../constants/constants';
@@ -28,15 +29,15 @@ export default function MovieList({ title, data, hideSeeAll = false }) {
       </View>
 
       {/* Moview Row */}
-      <ScrollView
+
+      <FlatList
         horizontal
+        data={data}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingLeft: 15 }}
-      >
-        {data.map((item, index) => {
+        renderItem={({ item }) => {
           return (
             <TouchableWithoutFeedback
-              key={index}
               onPress={() => navigation.push('Movie', item)}
             >
               <View className="space-y-2 mr-4">
@@ -58,8 +59,9 @@ export default function MovieList({ title, data, hideSeeAll = false }) {
               </View>
             </TouchableWithoutFeedback>
           );
-        })}
-      </ScrollView>
+        }}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
