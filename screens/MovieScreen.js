@@ -1,6 +1,6 @@
 import { View, ScrollView, TouchableOpacity, Image, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeftIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,40 +11,44 @@ import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { width, height } from '../constants/constants';
 import { FlatListComponent } from 'react-native';
-import { fetchMovieCredits, fetchMovieDetails, image500 } from '../api/MovieDB';
+import {
+  fetchMovieCredits,
+  fetchMovieDetails,
+  fetchMovieRecommendations,
+  image500,
+} from '../api/MovieDB';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function MovieScreen() {
   const { params: item } = useRoute();
-  const navigation = useNavigation();
 
-  const [genres, setGenres] = useState([]);
-  const [status, setStatus] = useState('');
-  const [runtime, setRuntime] = useState(null);
+  const [details, setDetails] = useState({});
   const [cast, setCast] = useState([]);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const releaseYear = new Date(item.release_date).getFullYear();
 
   useEffect(() => {
     getMovieDetails();
     getMovieCredits();
+    getSimilarMovies();
   }, [item]);
 
   async function getMovieDetails() {
     const data = await fetchMovieDetails(item.id);
-    setGenres(data.genres.map((genre) => genre.name));
-    setStatus(data.status);
-    setRuntime(data.runtime);
+    setDetails(data);
+    setIsLoading(false);
   }
 
   async function getMovieCredits() {
     const data = await fetchMovieCredits(item.id);
-    console.log(data.cast);
     setCast(data.cast);
   }
 
-  function releaseYear() {
-    return new Date(item.release_date).getFullYear();
+  async function getSimilarMovies() {
+    const data = await fetchMovieRecommendations(item.id);
+    setSimilarMovies(data.results);
   }
 
   if (isLoading) return <Loading />;
@@ -85,18 +89,18 @@ export default function MovieScreen() {
 
           {/* Status */}
           <Text className="text-neutral-400 font-semibold text-base text-center">
-            {status} • {releaseYear()} • {runtime && runtime} min
+            {details.status} • {releaseYear} • {details.runtime} min
           </Text>
 
           {/* Genres */}
           <View className="flex-row justify-center mx-4 space-x-3">
-            {genres.map((genre) => (
+            {details.genres.map((genre) => (
               <View
-                key={genre}
+                key={genre.id}
                 className="bg-yellow-400 px-3 py-1 rounded-full"
               >
                 <Text className="text-black text-center font-semibold text-base">
-                  {genre}
+                  {genre.name}
                 </Text>
               </View>
             ))}

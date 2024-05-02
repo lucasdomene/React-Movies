@@ -8,6 +8,9 @@ const upcomingMoviesEndpoint = `${baseUrl}/movie/upcoming?api_key=${API_KEY}`;
 const topRatedMoviesEndpoint = `${baseUrl}/movie/top_rated?api_key=${API_KEY}`;
 const movieDetailsEndpoint = `${baseUrl}/movie/{movie_id}?api_key=${API_KEY}`;
 const movieCreditsEndpoint = `${baseUrl}/movie/{movie_id}/credits?api_key=${API_KEY}`;
+const movieRecommendationsEndpoint = `${baseUrl}/movie/{movie_id}/recommendations?api_key=${API_KEY}`;
+const personDetailsEndpoint = `${baseUrl}/person/{person_id}?api_key=${API_KEY}`;
+const personMovieCreditsEndpoint = `${baseUrl}/person/{person_id}/movie_credits?api_key=${API_KEY}`;
 
 async function request(endpoint, params) {
   const options = {
@@ -43,6 +46,18 @@ export async function fetchMovieDetails(id) {
 
 export async function fetchMovieCredits(id) {
   return request(movieCreditsEndpoint.replace('{movie_id}', id));
+}
+
+export async function fetchMovieRecommendations(id) {
+  return request(movieRecommendationsEndpoint.replace('{movie_id}', id));
+}
+
+export async function fetchPersonDetails(id) {
+  return request(personDetailsEndpoint.replace('{person_id}', id));
+}
+
+export async function fetchPersonMovieCredits(id) {
+  return request(personMovieCreditsEndpoint.replace('{person_id}', id));
 }
 
 export function image500(path) {

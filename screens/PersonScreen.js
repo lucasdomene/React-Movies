@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, ScrollView, Image } from 'react-native';
 import { View } from 'react-native';
 
@@ -6,10 +6,52 @@ import Header from '../components/Header';
 import { android, width, height } from '../constants/constants';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { useRoute } from '@react-navigation/native';
+import {
+  fetchPersonDetails,
+  fetchPersonMovieCredits,
+  image500,
+} from '../api/MovieDB';
 
 export default function PersonScreen() {
-  const [movies, setMovies] = useState([1, 2, 3, 4, 5]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { params: item } = useRoute();
+
+  const [movies, setMovies] = useState([]);
+  const [details, setDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  function formattedDate(date) {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
+
+  const gender =
+    item.gender === 1
+      ? 'Female'
+      : item.gender === 2
+      ? 'Male'
+      : item.gender === 3
+      ? 'Non-binary'
+      : 'Unspecified';
+
+  useEffect(() => {
+    getDetails();
+    getMovies();
+  }, [item]);
+
+  async function getDetails() {
+    const details = await fetchPersonDetails(item.id);
+    setDetails(details);
+    setIsLoading(false);
+  }
+
+  async function getMovies() {
+    const data = await fetchPersonMovieCredits(item.id);
+    setMovies(data.cast);
+  }
 
   if (isLoading) return <Loading />;
 
@@ -33,7 +75,7 @@ export default function PersonScreen() {
         >
           <View className="items-center rounded-full overflow-hidden h-72 w-72 border-2 border-neutral-500">
             <Image
-              source={require('../assets/movie-poster.jpg')}
+              source={{ uri: image500(item.profile_path) }}
               style={{ height: height * 0.43, width: width * 0.74 }}
             />
           </View>
@@ -42,10 +84,10 @@ export default function PersonScreen() {
         {/* Name */}
         <View className="mt-6 space-y-1">
           <Text className="text-3xl text-white font-bold text-center">
-            Keanu Reeves
+            {item.name}
           </Text>
           <Text className="text-base text-neutral-500 text-center">
-            Beirut, Lebanon
+            {details.place_of_birth}
           </Text>
         </View>
 
@@ -53,19 +95,23 @@ export default function PersonScreen() {
         <View className="mx-3 p-4 mt-6 flex-row justify-between items-center rounded-full bg-neutral-700">
           <View className="border-r-2 border-r-neutral-400 px-2 items-center">
             <Text className="text-white font-semibold">Gender</Text>
-            <Text className="text-neutral-300 text-sm">Male</Text>
+            <Text className="text-neutral-300 text-sm">{gender}</Text>
           </View>
           <View className="border-r-2 border-r-neutral-400 px-2 items-center">
             <Text className="text-white font-semibold">Birthday</Text>
-            <Text className="text-neutral-300 text-sm">1964-09-02</Text>
+            <Text className="text-neutral-300 text-sm">
+              {formattedDate(details.birthday)}
+            </Text>
           </View>
           <View className="border-r-2 border-r-neutral-400 px-2 items-center">
             <Text className="text-white font-semibold">Known for</Text>
-            <Text className="text-neutral-300 text-sm">Acting</Text>
+            <Text className="text-neutral-300 text-sm">
+              {item.known_for_department}
+            </Text>
           </View>
           <View className="border-r-neutral-400 px-2 items-center">
             <Text className="text-white font-semibold">Popularity</Text>
-            <Text className="text-neutral-300 text-sm">64.23</Text>
+            <Text className="text-neutral-300 text-sm">{item.popularity}</Text>
           </View>
         </View>
 
@@ -73,9 +119,7 @@ export default function PersonScreen() {
         <View className="my-6 mx-4 space-y-2">
           <Text className="text-white text-lg">Biography</Text>
           <Text className="text-neutral-400 tracking-wide">
-            Keanu Charles Reeves is a Canadian actor. Known for his phlegmatic
-            disposition in roles spanning numerous genres, he has established
-            himself as a leading man in action cinema.
+            {details.biography}
           </Text>
         </View>
 

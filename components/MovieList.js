@@ -39,18 +39,18 @@ export default function MovieList({ title, data, hideSeeAll = false }) {
               key={index}
               onPress={() => navigation.push('Movie', item)}
             >
-              <View className="space-y-1 mr-4">
+              <View className="space-y-2 mr-4">
                 <Image
                   source={{ uri: image185(item.poster_path) }}
                   className="rounded-3xl"
                   style={{ width: width * 0.33, height: height * 0.22 }}
                 />
                 <Text
-                  className="text-neutral-300 ml-1"
+                  className="text-neutral-300 ml-1 text-center"
                   style={{
-                    width: width * 0.33,
+                    width: width * 0.3,
                   }}
-                  numberOfLines={1}
+                  numberOfLines={3}
                   ellipsizeMode="tail"
                 >
                   {item.title}

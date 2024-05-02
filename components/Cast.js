@@ -28,10 +28,16 @@ export default function Cast({ cast }) {
                     source={{ uri: image185(person.profile_path) }}
                   />
                 </View>
-                <Text className="text-white text-xs mt-1">
+                <Text
+                  className="text-white text-xs text-center mt-2 w-20"
+                  numberOfLines={3}
+                >
                   {person.character}
                 </Text>
-                <Text className="text-neutral-400 text-xs mt-1">
+                <Text
+                  className="text-neutral-400 text-xs text-center mt-1 w-20"
+                  numberOfLines={3}
+                >
                   {person.name}
                 </Text>
               </TouchableOpacity>
