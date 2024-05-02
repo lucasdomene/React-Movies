@@ -22,19 +22,26 @@ export default function SearchScreen() {
   const navigation = useNavigation();
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  let page = 1;
 
   async function handleSearch(value) {
     if (value && value.length > 2) {
-      setIsLoading(true);
+      if (page === 1) setIsLoading(true);
+
       const data = await searchMovies({
         query: value,
         include_adult: false,
         languague: 'en-US',
-        page: '1',
+        page: page,
       });
-      setResults(data.results);
+      setResults((previous) => [...previous, ...data.results]);
       setIsLoading(false);
     }
+  }
+  function handlePagging() {
+    page += 1;
+    handleSearch(query);
   }
 
   const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
@@ -47,7 +54,11 @@ export default function SearchScreen() {
           className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
           placeholder="Search Movie"
           placeholderTextColor={'lightgray'}
-          onChangeText={handleTextDebounce}
+          value={query}
+          onChangeText={(value) => {
+            setQuery(value);
+            handleTextDebounce(value);
+          }}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
@@ -90,7 +101,9 @@ export default function SearchScreen() {
               </TouchableWithoutFeedback>
             );
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => index}
+          onEndReachedThreshold={0.2}
+          onEndReached={handlePagging}
         />
       )}
     </SafeAreaView>
