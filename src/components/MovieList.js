@@ -24,11 +24,7 @@ export default function MovieList({
   const navigation = useNavigation();
   const [page, setPage] = useState(1);
 
-  const skeletonData = Array.from({ length: 3 }).map((_, index) => ({
-    id: index,
-    poster_path: '',
-    title: '',
-  }));
+  const skeletonData = [{}, {}, {}];
 
   useEffect(() => {
     console.log('USE EFFECT', page);

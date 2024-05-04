@@ -12,6 +12,7 @@ const Spacer = ({ width = 16 }) => <MotiView style={{ width }} />;
 
 export default function TrendingMovies({ data, isLoading }) {
   const navigation = useNavigation();
+  const skeletonData = [{}, {}, {}];
 
   function onPress(item) {
     navigation.navigate('Movie', item);
@@ -25,33 +26,19 @@ export default function TrendingMovies({ data, isLoading }) {
         </Skeleton>
       </View>
 
-      {isLoading ? (
-        <TrendingSkeleton />
-      ) : (
-        <Carousel
-          data={data}
-          firstItem={1}
-          inactiveSlideOpacity={0.6}
-          renderItem={({ item }) => (
+      <Carousel
+        data={isLoading ? skeletonData : data}
+        firstItem={1}
+        inactiveSlideOpacity={0.6}
+        renderItem={({ item }) => (
+          <Skeleton show={isLoading} radius={24}>
             <MovieCard item={item} onPress={() => onPress(item)} />
-          )}
-          sliderWidth={width}
-          itemWidth={width * 0.62}
-          slideStyle={{ display: 'flex', alignItems: 'center' }}
-        />
-      )}
-    </View>
-  );
-}
-
-function TrendingSkeleton() {
-  return (
-    <View className="flex flex-row items-center">
-      <Skeleton show width={70} height={340} radius={24} />
-      <Spacer />
-      <Skeleton show width={260} height={380} radius={24} />
-      <Spacer />
-      <Skeleton show width={70} height={340} radius={24} />
+          </Skeleton>
+        )}
+        sliderWidth={width}
+        itemWidth={width * 0.62}
+        slideStyle={{ display: 'flex', alignItems: 'center' }}
+      />
     </View>
   );
 }
