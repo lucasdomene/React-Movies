@@ -22,6 +22,8 @@ const personMovieCreditsEndpoint = (id) =>
   `${baseUrl}/person/${id}/movie_credits?api_key=${API_KEY}`;
 
 async function request(endpoint, params) {
+  console.log(endpoint, params);
+
   const options = {
     method: 'GET',
     url: endpoint,

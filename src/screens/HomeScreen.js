@@ -25,7 +25,9 @@ export default function HomeScreen() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isTrendingLoading, setIsTrendingLoading] = useState(true);
+  const [isUpcomingLoading, setIsUpcomingLoading] = useState(true);
+  const [isTopRatedLoading, setIsTopRatedLoading] = useState(true);
 
   useEffect(() => {
     getTrendingMovies();
@@ -36,8 +38,11 @@ export default function HomeScreen() {
   async function getTrendingMovies() {
     const data = await fetchTrendingMovies();
 
-    if (data && data.results) setTrendingMovies(data.results);
-    setIsLoading(false);
+    if (data && data.results) {
+      setTrendingMovies(data.results);
+    }
+
+    setIsTrendingLoading(false);
   }
 
   async function getUpcomingMovies(page) {
@@ -46,6 +51,8 @@ export default function HomeScreen() {
     if (data && data.results) {
       setUpcomingMovies((previous) => [...previous, ...data.results]);
     }
+
+    setIsUpcomingLoading(false);
   }
 
   async function getTopRatedMovies(page) {
@@ -54,9 +61,9 @@ export default function HomeScreen() {
     if (data && data.results) {
       setTopRatedMovies((previous) => [...previous, ...data.results]);
     }
-  }
 
-  if (isLoading) return <Loading />;
+    setIsTopRatedLoading(false);
+  }
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -76,25 +83,23 @@ export default function HomeScreen() {
 
       <ScrollView>
         {/* Trending Movies Carousel */}
-        {trendingMovies.length > 0 && <TrendingMovies data={trendingMovies} />}
+        <TrendingMovies data={trendingMovies} isLoading={isTrendingLoading} />
 
         {/* Upcoming Movies */}
-        {upcomingMovies.length > 0 && (
-          <MovieList
-            title="Upcoming"
-            data={upcomingMovies}
-            onPagging={getUpcomingMovies}
-          />
-        )}
+        <MovieList
+          title="Upcoming"
+          data={upcomingMovies}
+          onPagging={getUpcomingMovies}
+          isLoading={isUpcomingLoading}
+        />
 
         {/* Top Rated Movies */}
-        {topRatedMovies.length > 0 && (
-          <MovieList
-            title="Top Rated"
-            data={topRatedMovies}
-            onPagging={getTopRatedMovies}
-          />
-        )}
+        <MovieList
+          title="Top Rated"
+          data={topRatedMovies}
+          onPagging={getTopRatedMovies}
+          isLoading={isTopRatedLoading}
+        />
       </ScrollView>
     </View>
   );
