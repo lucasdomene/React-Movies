@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { height, width } from '../constants/constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,14 +23,19 @@ export default function SearchScreen() {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
-  let page = 1;
+  const [page, setPage] = useState(1);
 
-  async function handleSearch(value) {
-    if (value && value.length > 2) {
+  useEffect(() => {
+    handleSearch(query);
+  }, [page]);
+
+  async function handleSearch(query) {
+    console.log('query', query);
+    if (query && query.length > 2) {
       if (page === 1) setIsLoading(true);
 
       const data = await searchMovies({
-        query: value,
+        query: query,
         include_adult: false,
         languague: 'en-US',
         page: page,
@@ -38,10 +43,6 @@ export default function SearchScreen() {
       setResults((previous) => [...previous, ...data.results]);
       setIsLoading(false);
     }
-  }
-  function handlePagging() {
-    page += 1;
-    handleSearch(query);
   }
 
   const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
@@ -55,9 +56,9 @@ export default function SearchScreen() {
           placeholder="Search Movie"
           placeholderTextColor={'lightgray'}
           value={query}
-          onChangeText={(value) => {
-            setQuery(value);
-            handleTextDebounce(value);
+          onChangeText={(query) => {
+            setQuery(query);
+            handleTextDebounce(query);
           }}
         />
         <TouchableOpacity
@@ -103,7 +104,7 @@ export default function SearchScreen() {
           }}
           keyExtractor={(item, index) => index}
           onEndReachedThreshold={0.2}
-          onEndReached={handlePagging}
+          onEndReached={() => setPage(page + 1)}
         />
       )}
     </SafeAreaView>

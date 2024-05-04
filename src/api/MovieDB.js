@@ -28,9 +28,6 @@ async function request(endpoint, params) {
     params,
   };
 
-  console.log(options.url);
-  console.log(options.params);
-
   try {
     const response = await axios.request(options);
     return response.data;
