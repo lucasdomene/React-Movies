@@ -10,14 +10,14 @@ import {
 
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
-import Loading from '../components/Loading';
 import { iOS } from '../constants/constants';
 import {
   fetchTrendingMovies,
   fetchUpcomingMovies,
   fetchTopRatedMovies,
 } from '../api/MovieDB';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+
+import { RefreshControl } from 'react-native';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -28,12 +28,29 @@ export default function HomeScreen() {
   const [isTrendingLoading, setIsTrendingLoading] = useState(true);
   const [isUpcomingLoading, setIsUpcomingLoading] = useState(true);
   const [isTopRatedLoading, setIsTopRatedLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     getTrendingMovies();
     getUpcomingMovies(1);
     getTopRatedMovies(1);
   }, []);
+
+  function refresh() {
+    setIsRefreshing(true);
+
+    setIsTrendingLoading(true);
+    setIsUpcomingLoading(true);
+    setIsTopRatedLoading(true);
+
+    setTrendingMovies([]);
+    setUpcomingMovies([]);
+    setIsTopRatedLoading([]);
+
+    getTrendingMovies();
+    getUpcomingMovies(1);
+    getTopRatedMovies(1);
+  }
 
   async function getTrendingMovies() {
     const data = await fetchTrendingMovies();
@@ -43,6 +60,7 @@ export default function HomeScreen() {
     }
 
     setIsTrendingLoading(false);
+    setIsRefreshing(false);
   }
 
   async function getUpcomingMovies(page) {
@@ -66,7 +84,17 @@ export default function HomeScreen() {
   }
 
   return (
-    <View className="flex-1 bg-neutral-800">
+    <ScrollView
+      className="flex-1 bg-neutral-800"
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          colors={['white']}
+          tintColor="white"
+        />
+      }
+    >
       {/* Navigation Bar */}
       <SafeAreaView className={iOS ? '-mb-2 mt-2' : 'mb-3 mt-2'}>
         <StatusBar style="light" />
@@ -91,6 +119,7 @@ export default function HomeScreen() {
           data={upcomingMovies}
           onPagging={getUpcomingMovies}
           isLoading={isUpcomingLoading}
+          isRefreshing={isRefreshing}
         />
 
         {/* Top Rated Movies */}
@@ -99,8 +128,9 @@ export default function HomeScreen() {
           data={topRatedMovies}
           onPagging={getTopRatedMovies}
           isLoading={isTopRatedLoading}
+          isRefreshing={isRefreshing}
         />
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 }

@@ -26,13 +26,14 @@ export default function MovieScreen() {
   const [cast, setCast] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSimilarMoviesLoading, setIsSimilarMoviesLoading] = useState(true);
 
   const releaseYear = new Date(item.release_date).getFullYear();
 
   useEffect(() => {
     getMovieDetails();
     getMovieCredits();
-    getSimilarMovies();
+    getSimilarMovies(1);
   }, [item]);
 
   async function getMovieDetails() {
@@ -46,9 +47,10 @@ export default function MovieScreen() {
     setCast(data.cast);
   }
 
-  async function getSimilarMovies() {
+  async function getSimilarMovies(page) {
     const data = await fetchMovieRecommendations(item.id);
     setSimilarMovies(data.results);
+    setIsSimilarMoviesLoading(false);
   }
 
   if (isLoading) return <Loading />;
@@ -127,7 +129,13 @@ export default function MovieScreen() {
       <Cast cast={cast} />
 
       {/* Similar movies */}
-      <MovieList title="Similar Movies" data={similarMovies} hideSeeAll />
+      <MovieList
+        title="Similar Movies"
+        data={similarMovies}
+        onPagging={getSimilarMovies}
+        isLoading={isSimilarMoviesLoading}
+        hideSeeAll
+      />
     </ScrollView>
   );
 }

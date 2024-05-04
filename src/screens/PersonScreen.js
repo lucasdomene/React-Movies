@@ -19,6 +19,7 @@ export default function PersonScreen() {
   const [movies, setMovies] = useState([]);
   const [details, setDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isMovieLoading, setIsMovieLoading] = useState(true);
 
   function formattedDate(date) {
     return new Date(date).toLocaleDateString('en-US', {
@@ -51,6 +52,7 @@ export default function PersonScreen() {
   async function getMovies() {
     const data = await fetchPersonMovieCredits(item.id);
     setMovies(data.cast);
+    setIsMovieLoading(false);
   }
 
   if (isLoading) return <Loading />;
@@ -126,7 +128,12 @@ export default function PersonScreen() {
         </View>
 
         {/* Movie List */}
-        <MovieList title="Movies" data={movies} hideSeeAll />
+        <MovieList
+          title="Movies"
+          data={movies}
+          isLoading={isMovieLoading}
+          hideSeeAll
+        />
       </View>
     </ScrollView>
   );

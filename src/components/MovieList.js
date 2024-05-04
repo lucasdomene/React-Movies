@@ -20,6 +20,7 @@ export default function MovieList({
   hideSeeAll = false,
   onPagging = null,
   isLoading = false,
+  isRefreshing = false,
 }) {
   const navigation = useNavigation();
   const [page, setPage] = useState(1);
@@ -27,9 +28,10 @@ export default function MovieList({
   const skeletonData = [{}, {}, {}];
 
   useEffect(() => {
-    console.log('USE EFFECT', page);
     if (onPagging) onPagging(page);
   }, [page]);
+
+  if (isRefreshing && page !== 1) setPage(1);
 
   return (
     <View className="mb-8 spacey-4">
