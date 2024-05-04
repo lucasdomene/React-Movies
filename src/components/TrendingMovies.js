@@ -20,19 +20,13 @@ export default function TrendingMovies({ data, isLoading }) {
   return (
     <View className="mb-8">
       <View className="text-white text-xl mx-4 mb-5">
-        <Skeleton width={100} show={true}>
+        <Skeleton width={100} show={isLoading}>
           <Text className="text-white text-xl">Trending</Text>
         </Skeleton>
       </View>
 
-      {true ? (
-        <View className="flex flex-row items-center">
-          <Skeleton show={true} width={70} height={340} radius={24} />
-          <Spacer />
-          <Skeleton show={true} width={260} height={380} radius={24} />
-          <Spacer />
-          <Skeleton show={true} width={70} height={340} radius={24} />
-        </View>
+      {isLoading ? (
+        <TrendingSkeleton />
       ) : (
         <Carousel
           data={data}
@@ -51,5 +45,13 @@ export default function TrendingMovies({ data, isLoading }) {
 }
 
 function TrendingSkeleton() {
-
+  return (
+    <View className="flex flex-row items-center">
+      <Skeleton show width={70} height={340} radius={24} />
+      <Spacer />
+      <Skeleton show width={260} height={380} radius={24} />
+      <Spacer />
+      <Skeleton show width={70} height={340} radius={24} />
+    </View>
+  );
 }
