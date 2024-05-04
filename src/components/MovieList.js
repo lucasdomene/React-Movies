@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -23,12 +23,17 @@ export default function MovieList({
   isRefreshing = false,
 }) {
   const navigation = useNavigation();
+  const isInitialMount = useRef(true);
   const [page, setPage] = useState(1);
 
   const skeletonData = [{}, {}, {}];
 
   useEffect(() => {
-    if (onPagging) onPagging(page);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      if (onPagging) onPagging(page);
+    }
   }, [page]);
 
   if (isRefreshing && page !== 1) setPage(1);
@@ -84,7 +89,10 @@ export default function MovieList({
         }}
         keyExtractor={(item, index) => index}
         onEndReachedThreshold={0.2}
-        onEndReached={() => setPage(page + 1)}
+        onEndReached={() => {
+          if (isLoading) return;
+          setPage(page + 1);
+        }}
       />
     </View>
   );
