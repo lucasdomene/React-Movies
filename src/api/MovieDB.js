@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { API_KEY } from '../constants/constants';
 
 const baseUrl = 'https://api.themoviedb.org/3';
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
+
+console.log(API_KEY);
 
 const trendingMoviesEndpoint = `${baseUrl}/trending/movie/day?api_key=${API_KEY}`;
 const upcomingMoviesEndpoint = (page) =>
