@@ -13,6 +13,7 @@ import {
 import { width, height } from '../constants/constants';
 import { image185 } from '../api/MovieDB';
 import { Skeleton } from 'moti/skeleton';
+import { FadeInImage } from './FadeInImage';
 
 export default function MovieList({
   title,
@@ -66,8 +67,8 @@ export default function MovieList({
             >
               <View className="space-y-2 mr-4">
                 <Skeleton show={isLoading}>
-                  <Image
-                    source={{ uri: image185(item.poster_path) }}
+                  <FadeInImage
+                    uri={image185(item.poster_path)}
                     className="rounded-3xl"
                     style={{ width: width * 0.33, height: height * 0.22 }}
                   />
