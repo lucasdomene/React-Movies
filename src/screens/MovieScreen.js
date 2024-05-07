@@ -53,6 +53,43 @@ export default function MovieScreen() {
     setIsSimilarMoviesLoading(false);
   }
 
+  const MoviePoster = () => (
+    <View>
+      <Image
+        source={{ uri: image500(item.poster_path) }}
+        style={{ width, height: height * 0.55 }}
+      />
+      <LinearGradient
+        colors={['transparent', 'rgba(23, 23, 23, 0.8)', 'rgba(23, 23, 23, 1)']}
+        style={{ width, height: height * 0.4 }}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        className="absolute bottom-0"
+      />
+    </View>
+  );
+
+  const Genres = () => (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: 12,
+        gap: 10,
+        justifyContent: 'center',
+        flexGrow: 1,
+      }}
+    >
+      {details.genres.map((genre) => (
+        <View key={genre.id} className="bg-yellow-400 px-3 py-1 rounded-full">
+          <Text className="text-black text-center font-semibold text-base">
+            {genre.name}
+          </Text>
+        </View>
+      ))}
+    </ScrollView>
+  );
+
   if (isLoading) return <Loading />;
 
   return (
@@ -63,24 +100,7 @@ export default function MovieScreen() {
       <Header overlap />
 
       <View className="w-full">
-        {/* Movie Poster */}
-        <View>
-          <Image
-            source={{ uri: image500(item.poster_path) }}
-            style={{ width, height: height * 0.55 }}
-          />
-          <LinearGradient
-            colors={[
-              'transparent',
-              'rgba(23, 23, 23, 0.8)',
-              'rgba(23, 23, 23, 1)',
-            ]}
-            style={{ width, height: height * 0.4 }}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
-            className="absolute bottom-0"
-          />
-        </View>
+        <MoviePoster />
 
         {/* Movie Details */}
         <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
@@ -95,28 +115,7 @@ export default function MovieScreen() {
           </Text>
 
           {/* Genres */}
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: 12,
-              gap: 10,
-              justifyContent: 'center',
-              flexGrow: 1,
-            }}
-          >
-            {details.genres.map((genre) => (
-              <View
-                key={genre.id}
-                className="bg-yellow-400 px-3 py-1 rounded-full"
-              >
-                <Text className="text-black text-center font-semibold text-base">
-                  {genre.name}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
+          <Genres />
 
           {/* Description */}
           <Text className="text-neutral-400 text-base mx-4 tracking-wide">

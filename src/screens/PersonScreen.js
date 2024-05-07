@@ -55,6 +55,63 @@ export default function PersonScreen() {
     setIsMovieLoading(false);
   }
 
+  const ProfileImage = () => (
+    <View
+      className="flex-row justify-center"
+      style={{
+        shadowColor: 'gray',
+        shadowRadius: 40,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 1,
+      }}
+    >
+      <View className="items-center rounded-full overflow-hidden h-72 w-72 border-2 border-neutral-500">
+        <Image
+          source={{ uri: image500(item.profile_path) }}
+          style={{ height: height * 0.43, width: width * 0.74 }}
+        />
+      </View>
+    </View>
+  );
+
+  const Headline = () => (
+    <View className="mt-6 space-y-1">
+      <Text className="text-3xl text-white font-bold text-center">
+        {item.name}
+      </Text>
+      <Text className="text-base text-neutral-500 text-center">
+        {details.place_of_birth}
+      </Text>
+    </View>
+  );
+
+  const Stats = () => (
+    <View className="mx-3 p-4 mt-6 flex-row justify-between items-center rounded-full bg-neutral-700">
+      <View className="border-r-2 border-r-neutral-400 px-2 items-center">
+        <Text className="text-white font-semibold">Gender</Text>
+        <Text className="text-neutral-300 text-sm">{gender}</Text>
+      </View>
+      <View className="border-r-2 border-r-neutral-400 px-2 items-center">
+        <Text className="text-white font-semibold">Birthday</Text>
+        <Text className="text-neutral-300 text-sm">
+          {formattedDate(details.birthday)}
+        </Text>
+      </View>
+      <View className="border-r-2 border-r-neutral-400 px-2 items-center">
+        <Text className="text-white font-semibold">Known for</Text>
+        <Text className="text-neutral-300 text-sm">
+          {item.known_for_department}
+        </Text>
+      </View>
+      <View className="border-r-neutral-400 px-2 items-center">
+        <Text className="text-white font-semibold">Popularity</Text>
+        <Text className="text-neutral-300 text-sm">
+          {item.popularity.toFixed(2)}%
+        </Text>
+      </View>
+    </View>
+  );
+
   if (isLoading) return <Loading />;
 
   return (
@@ -66,58 +123,13 @@ export default function PersonScreen() {
 
       {/* Details */}
       <View className={`${android && 'mt-8'}`}>
-        <View
-          className="flex-row justify-center"
-          style={{
-            shadowColor: 'gray',
-            shadowRadius: 40,
-            shadowOffset: { width: 0, height: 5 },
-            shadowOpacity: 1,
-          }}
-        >
-          <View className="items-center rounded-full overflow-hidden h-72 w-72 border-2 border-neutral-500">
-            <Image
-              source={{ uri: image500(item.profile_path) }}
-              style={{ height: height * 0.43, width: width * 0.74 }}
-            />
-          </View>
-        </View>
+        <ProfileImage />
 
         {/* Name */}
-        <View className="mt-6 space-y-1">
-          <Text className="text-3xl text-white font-bold text-center">
-            {item.name}
-          </Text>
-          <Text className="text-base text-neutral-500 text-center">
-            {details.place_of_birth}
-          </Text>
-        </View>
+        <Headline />
 
         {/* Stats */}
-        <View className="mx-3 p-4 mt-6 flex-row justify-between items-center rounded-full bg-neutral-700">
-          <View className="border-r-2 border-r-neutral-400 px-2 items-center">
-            <Text className="text-white font-semibold">Gender</Text>
-            <Text className="text-neutral-300 text-sm">{gender}</Text>
-          </View>
-          <View className="border-r-2 border-r-neutral-400 px-2 items-center">
-            <Text className="text-white font-semibold">Birthday</Text>
-            <Text className="text-neutral-300 text-sm">
-              {formattedDate(details.birthday)}
-            </Text>
-          </View>
-          <View className="border-r-2 border-r-neutral-400 px-2 items-center">
-            <Text className="text-white font-semibold">Known for</Text>
-            <Text className="text-neutral-300 text-sm">
-              {item.known_for_department}
-            </Text>
-          </View>
-          <View className="border-r-neutral-400 px-2 items-center">
-            <Text className="text-white font-semibold">Popularity</Text>
-            <Text className="text-neutral-300 text-sm">
-              {item.popularity.toFixed(2)}%
-            </Text>
-          </View>
-        </View>
+        <Stats />
 
         {/* Biography */}
         <View className="my-6 mx-4 space-y-2">

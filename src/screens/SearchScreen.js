@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { debounce } from 'lodash';
 import Loading from '../components/Loading';
 import { image342, searchMovies } from '../api/MovieDB';
+import MovieItem from '../components/MovieItem';
 
 export default function SearchScreen() {
   const navigation = useNavigation();
@@ -45,32 +46,35 @@ export default function SearchScreen() {
     }
   }
 
+  const SearchBar = () => (
+    <View className="mx-4 my-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
+      <TextInput
+        className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
+        placeholder="Search Movie"
+        placeholderTextColor={'lightgray'}
+        value={query}
+        onChangeText={(query) => {
+          setQuery(query);
+          handleTextDebounce(query);
+        }}
+      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+        className="rounded-full p-3 m-1 bg-neutral-500"
+      >
+        <XMarkIcon size={25} color="white" />
+      </TouchableOpacity>
+    </View>
+  );
+
   const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
 
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
       {/* Search Bar */}
-      <View className="mx-4 my-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
-        <TextInput
-          className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
-          placeholder="Search Movie"
-          placeholderTextColor={'lightgray'}
-          value={query}
-          onChangeText={(query) => {
-            setQuery(query);
-            handleTextDebounce(query);
-          }}
-        />
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
-          className="rounded-full p-3 m-1 bg-neutral-500"
-        >
-          <XMarkIcon size={25} color="white" />
-        </TouchableOpacity>
-      </View>
+      <SearchBar />
 
       {/* Results */}
-
       {isLoading ? (
         <Loading />
       ) : (
@@ -81,26 +85,7 @@ export default function SearchScreen() {
           numColumns={2}
           data={results}
           renderItem={({ item }) => {
-            return (
-              <TouchableWithoutFeedback
-                onPress={() => navigation.push('Movie', item)}
-              >
-                <View className="space-y-2 mb-4">
-                  <Image
-                    className="rounded-3xl"
-                    source={{ uri: image342(item.poster_path) }}
-                    style={{ width: width * 0.44, height: height * 0.3 }}
-                  />
-                  <Text
-                    className="text-neutral-300 ml-1 text-center"
-                    style={{ width: width * 0.44 }}
-                    numberOfLines={3}
-                  >
-                    {item.title}
-                  </Text>
-                </View>
-              </TouchableWithoutFeedback>
-            );
+            return <MovieItem item={item} />;
           }}
           keyExtractor={(item, index) => index}
           onEndReachedThreshold={0.2}

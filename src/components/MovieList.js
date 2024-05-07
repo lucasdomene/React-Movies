@@ -37,31 +37,62 @@ export default function MovieList({
     }
   }, [page]);
 
+  const Headline = () => (
+    <View className="mx-4 mb-4 flex-row justify-between items-center">
+      <Skeleton show={isLoading}>
+        <Text className="text-white text-xl">{title}</Text>
+      </Skeleton>
+      {!hideSeeAll && (
+        <Skeleton show={isLoading}>
+          <TouchableOpacity>
+            <Text
+              className="text-lg text-yellow-400"
+              onPress={() => {
+                navigation.setOptions({ title: '' });
+                navigation.navigate('MovieList', { data, title });
+              }}
+            >
+              See All
+            </Text>
+          </TouchableOpacity>
+        </Skeleton>
+      )}
+    </View>
+  );
+
+  const MovieItem = ({ item }) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => navigation.push('Movie', item)}>
+        <View className="space-y-2 mr-4">
+          <Skeleton show={isLoading}>
+            <FadeInImage
+              uri={image185(item.poster_path)}
+              className="rounded-3xl"
+              style={{ width: width * 0.33, height: height * 0.22 }}
+            />
+          </Skeleton>
+
+          <Text
+            className="text-neutral-300 ml-1 text-center"
+            style={{
+              width: width * 0.3,
+            }}
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {item.title}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   if (isRefreshing && page !== 1) setPage(1);
 
   return (
     <View className="mb-8 spacey-4">
       {/* Headline */}
-      <View className="mx-4 mb-4 flex-row justify-between items-center">
-        <Skeleton show={isLoading}>
-          <Text className="text-white text-xl">{title}</Text>
-        </Skeleton>
-        {!hideSeeAll && (
-          <Skeleton show={isLoading}>
-            <TouchableOpacity>
-              <Text
-                className="text-lg text-yellow-400"
-                onPress={() => {
-                  navigation.setOptions({ title: '' });
-                  navigation.navigate('MovieList', { data, title });
-                }}
-              >
-                See All
-              </Text>
-            </TouchableOpacity>
-          </Skeleton>
-        )}
-      </View>
+      <Headline />
 
       <FlatList
         horizontal
@@ -69,32 +100,7 @@ export default function MovieList({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingLeft: 15 }}
         renderItem={({ item }) => {
-          return (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.push('Movie', item)}
-            >
-              <View className="space-y-2 mr-4">
-                <Skeleton show={isLoading}>
-                  <FadeInImage
-                    uri={image185(item.poster_path)}
-                    className="rounded-3xl"
-                    style={{ width: width * 0.33, height: height * 0.22 }}
-                  />
-                </Skeleton>
-
-                <Text
-                  className="text-neutral-300 ml-1 text-center"
-                  style={{
-                    width: width * 0.3,
-                  }}
-                  numberOfLines={3}
-                  ellipsizeMode="tail"
-                >
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
-          );
+          return <MovieItem item={item} />;
         }}
         keyExtractor={(item, index) => index}
         onEndReachedThreshold={0.2}
