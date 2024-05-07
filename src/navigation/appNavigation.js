@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MovieScreen from '../screens/MovieScreen';
 import PersonScreen from '../screens/PersonScreen';
 import SearchScreen from '../screens/SearchScreen';
+import MovieListScreen from '../screens/MovieListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,15 @@ export default function AppNavigation() {
           name="Search"
           component={SearchScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MovieList"
+          component={MovieListScreen}
+          options={({ route }) => ({
+            title: route.params.title,
+            headerStyle: { backgroundColor: '#262626' },
+            headerTintColor: '#fff',
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

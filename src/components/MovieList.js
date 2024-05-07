@@ -49,7 +49,15 @@ export default function MovieList({
         {!hideSeeAll && (
           <Skeleton show={isLoading}>
             <TouchableOpacity>
-              <Text className="text-lg text-yellow-400">See All</Text>
+              <Text
+                className="text-lg text-yellow-400"
+                onPress={() => {
+                  navigation.setOptions({ title: '' });
+                  navigation.navigate('MovieList', { data, title });
+                }}
+              >
+                See All
+              </Text>
             </TouchableOpacity>
           </Skeleton>
         )}
