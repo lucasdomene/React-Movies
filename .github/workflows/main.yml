@@ -5,7 +5,14 @@ on:
     branches:
       - stage
       - master
-    types: [opened, synchronize, labeled, unlabeled]
+    types:
+      - opened
+      - synchronize
+      - labeled
+      - unlabeled
+      - edited
+      - ready_for_review # Runs when the PR is marked "ready for review"
+  workflow_dispatch: # Allows manual re-run
 
 jobs:
   enforce_merge_type:
