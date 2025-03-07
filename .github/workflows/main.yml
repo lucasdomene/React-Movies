@@ -1,0 +1,42 @@
+name: Meme-Based Merge Guidance
+
+on:
+  pull_request:
+    branches:
+      - stage
+      - master
+    types: [opened, synchronize, labeled, unlabeled]
+
+jobs:
+  enforce_merge_type:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Merge Type
+        run: |
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+
+          # Ensure this only runs for `stage` and `master`
+          if [[ "$BASE_BRANCH" != "stage" && "$BASE_BRANCH" != "master" ]]; then
+            echo "Skipping - This PR is not targeting 'stage' or 'master'."
+            exit 0
+          fi
+
+          # Get the merge method (default is undefined until the user selects one)
+          MERGE_TYPE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "${{ github.event.pull_request.url }}" | jq -r '.merge_commit_sha')
+
+          if [[ "$BASE_BRANCH" == "stage" || "$BASE_BRANCH" == "master" ]]; then
+            if [[ "$MERGE_TYPE" == "null" ]]; then
+              echo "🚨 Squash merging is not allowed on '$BASE_BRANCH'! Posting meme..."
+              curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -d '{"body": "🚨 **Squash merging is not allowed on '$BASE_BRANCH'!**\n\n![Squash Meme](https://your-meme-image-url.com/squash-meme.png)"}' \
+                "$PR_URL/comments"
+              exit 1
+            else
+              echo "✅ Correct Merge Type for '$BASE_BRANCH'"
+              curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -d '{"body": "✅ **Great job! You used the correct merge type for '$BASE_BRANCH'!**\n\n![Merge Meme](https://your-meme-image-url.com/merge-meme.png)"}' \
+                "$PR_URL/comments"
+            fi
+          fi
