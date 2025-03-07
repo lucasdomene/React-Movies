@@ -30,13 +30,13 @@ jobs:
             if [[ "$MERGE_TYPE" == "null" ]]; then
               echo "🚨 Squash merging is not allowed on '$BASE_BRANCH'! Posting meme..."
               curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                -d '{"body": "🚨 **Squash merging is not allowed on '$BASE_BRANCH'!**\n\n![Squash Meme](https://your-meme-image-url.com/squash-meme.png)"}' \
+                -d '{"body": "🚨 **Squash merging is not allowed on '$BASE_BRANCH'!**\n\n![Squash Meme](https://cjones.iihr.uiowa.edu/sites/cjones.iihr.uiowa.edu/files/styles/large/public/2021-12/drake8.JPG?itok=YqllCDai)"}' \
                 "$PR_URL/comments"
               exit 1
             else
               echo "✅ Correct Merge Type for '$BASE_BRANCH'"
               curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                -d '{"body": "✅ **Great job! You used the correct merge type for '$BASE_BRANCH'!**\n\n![Merge Meme](https://your-meme-image-url.com/merge-meme.png)"}' \
+                -d '{"body": "✅ **Great job! You used the correct merge type for '$BASE_BRANCH'!**\n\n![Merge Meme](https://i.pinimg.com/474x/77/11/c7/7711c7a8749bd065736d815636fbdc0e.jpg)"}' \
                 "$PR_URL/comments"
             fi
           fi
